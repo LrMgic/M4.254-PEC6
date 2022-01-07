@@ -1,0 +1,9 @@
+.wine-name .ng-valid,
+.wine-imageUrl .ng-valid,
+.wine-price .ng-valid {
+  border: green 1px solid;
+}
+
+.dangerText {
+  color: red;
+}

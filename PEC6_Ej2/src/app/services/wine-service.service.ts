@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
+import { of as ObservableOf } from 'rxjs/observable/of';
 import { Wine } from "../models/wine";
 
 @Injectable({
@@ -8,9 +10,10 @@ import { Wine } from "../models/wine";
 export class WineServiceService {
   private wines: Wine[];
   private wine: Wine;
-  public wineForm: FormGroup;
+  private wineForm: FormGroup;
   imgUrlPattern =
-    "(https?://)?(www.)?([a-zA-Z0-9]{1,})\\.([a-zA-Z]{2,3})[/\\w .-]*/?";
+  "(https?://)?(www.)?([a-zA-Z0-9]{1,})\\.([a-zA-Z]{2,3})[/\\w .-]*/?";
+
   constructor(private formBuilder: FormBuilder) {
     this.wines = [
       {
@@ -82,15 +85,18 @@ export class WineServiceService {
     ];
   }
 
-  getWines(): Wine[] {
-    return this.wines;
+  getWines(): Observable<Wine[]> {
+    return ObservableOf(this.wines);
   }
 
-  changeQuantity(wineID: number, changeInQuantity: number): Wine {
+  changeQuantity(wineID: number, changeInQuantity: number): Observable<Wine> {
     this.wine = this.wines.find(({ id }) => wineID === id);
     this.wine.quantityInCart += changeInQuantity;
-    return this.wine;
+    return ObservableOf(this.wine);
   }
 
-  create(wine: Wine): any {}
+  create(wine: Wine): Observable<any> {
+    this.wines.push(wine);
+    return ObservableOf(this.wines);
+  }
 }

@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Wine } from "src/app/models/wine";
-import { WineServiceService } from "src/app/services/wine-service.service";
+import { WineService } from "src/app/services/wine-service.service";
 
 @Component({
   selector: "app-wine-new",
@@ -10,13 +10,16 @@ import { WineServiceService } from "src/app/services/wine-service.service";
   styleUrls: ["./wine-new.component.css"],
 })
 export class WineNewComponent {
+  @Output() private productCreated: EventEmitter<void> = new EventEmitter();
+  public message = "";
+
   public wineForm: FormGroup;
   private wine$: Observable<Wine>;
   submitted = false;
   imgUrlPattern =
     "(https?://)?(www.)?([a-zA-Z0-9]{1,})\\.([a-zA-Z]{2,3})[/\\w .-]*/?";
   constructor(
-    public wineService: WineServiceService,
+    public wineService: WineService,
     private formBuilder: FormBuilder
   ) {
     this.createForm();
@@ -45,14 +48,20 @@ export class WineNewComponent {
     if (this.wineForm.valid) {
       console.log("Wine Form Value: ", this.wineForm.value);
       const wine: Wine = productForm.value.product;
-      this.wineService.create(wine)
+      this.wineService.create(wine).subscribe(
+        (res) => {
+          this.message = "Product successfully created.";
+          console.log("Triggered event emitter");
+          this.productCreated.next();
+        },
+        (err) => {
+          this.message = "Unable to create product, please try again.";
+        }
+      );
     } else {
       console.error("Error Wine Form");
+      this.message = "Please correct all errors and resubmit the form";
     }
-  }
-
-  create() {
-
   }
 
   get name() {
