@@ -1,0 +1,51 @@
+<h2>Create Wine</h2>
+
+<div class="form-group">
+  <form [formGroup]="wineForm" (ngSubmit)="onSubmit()">
+    <div class="wine-name">
+      <input type="text" placeholder="Wine Name" name="wineName" formControlName="name">
+      <div class="dangerText" *ngIf="(name.invalid &&
+                  ( wineForm.get('name').dirty ||
+                    wineForm.get('name').touched )) || (name.invalid && submitted)">
+        <div class="dangerText" *ngIf="wineForm.get('name').errors.required">
+          Wine name is required
+        </div>
+        <!-- <div class="dangerText" *ngIf="wineForm.get('name').errors.NameWineValidator">
+          Wine name is invalid
+        </div> -->
+
+      </div>
+    </div>
+    <div class="wine-price">
+      <input type="number" placeholder="Wine Price" formControlName="price">
+      <div class="dangerText" *ngIf="(price.invalid &&
+      ( wineForm.get('price').dirty ||
+        wineForm.get('price').touched )) || (price.invalid && submitted)">
+        <div class="dangerText" *ngIf="wineForm.get('price').errors.required">
+          Wine price is required
+        </div>
+        <div class="dangerText" *ngIf="wineForm.get('price').errors.min">
+          Wine price must be greater than 0
+        </div>
+      </div>
+    </div>
+    <div class="wine-imageUrl">
+      <input type="text" placeholder="Wine Image URL" formControlName="imageUrl">
+      <div class="dangerText"
+        *ngIf="(imageUrl.invalid && ( wineForm.get('imageUrl').dirty || wineForm.get('imageUrl').touched )) || (imageUrl.invalid && submitted)">
+        <div class="dangerText" *ngIf="wineForm.get('imageUrl').errors.required">
+          Wine image URL is required
+        </div>
+        <div class="dangerText" *ngIf="wineForm.get('imageUrl').errors.pattern">
+          Wine Image URL does not seem to be a valid URL. Ex: https://www.direccion.com/nuevo-vino.jpg
+        </div>
+
+      </div>
+    </div>
+    <div class="wine-isOnSale">
+      <input type="checkbox" formControlName="isOnSale">
+      <label for="isOnSale">On Sale</label>
+    </div>
+    <button type="submit">Create</button>
+  </form>
+</div>

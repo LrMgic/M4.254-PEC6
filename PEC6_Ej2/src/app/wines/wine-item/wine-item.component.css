@@ -1,0 +1,14 @@
+.wine-item {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  display: inline-block;
+}
+
+.wine-item .details {
+  text-align: center;
+}
+
+.wine-item.sale {
+  background-color: rebeccapurple;
+}
